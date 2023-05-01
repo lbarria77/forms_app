@@ -60,27 +60,30 @@ class _RegisterForm extends StatelessWidget {
       children: [
         CustomTextFormField(
           label: 'Nombre de usuario',
+          prefixIcon: Icons.person_outline,
           onChanged: registerCubit.userNameChanged,
-          errorMessage:
-              username.isPure || username.isValid ? null : 'Usuario inválido',
+          errorMessage: username.errorMessage,
         ),
         const SizedBox(height: 10),
         CustomTextFormField(
           label: 'Correo electrónico',
+          prefixIcon: Icons.email_outlined,
           onChanged: registerCubit.emailChanged,
-          // errorMessage: email.errorMessage,
+          errorMessage: email.errorMessage,
         ),
         const SizedBox(height: 10),
         CustomTextFormField(
-          label: 'Contraseña:',
+          label: 'Contraseña',
+          prefixIcon: Icons.lock_outline,
           obscureText: true,
           onChanged: registerCubit.passwordChanged,
-          // errorMessage: password.errorMessage,
+          errorMessage: password.errorMessage,
         ),
         const SizedBox(height: 20),
         FilledButton.tonalIcon(
           onPressed: () {
-            registerCubit.onSubmit();
+            context.read<RegisterCubit>().onSubmit();
+            // registerCubit.onSubmit();
           },
           icon: const Icon(Icons.save),
           label: const Text('Crear usuario'),

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:forms_app/infrastructure/inputs/email.dart';
 import 'package:formz/formz.dart';
 
 import '../../../infrastructure/inputs/inputs.dart';
@@ -11,10 +12,12 @@ class RegisterCubit extends Cubit<RegisterFormState> {
 
   void onSubmit() {
     emit(state.copyWith(
-      formStatus: FormStatus.validating,
-      userName: Username.dirty(state.userName.value),
-      password: Password.dirty(state.password.value),
-    ));
+        formStatus: FormStatus.validating,
+        userName: Username.dirty(state.userName.value),
+        password: Password.dirty(state.password.value),
+        email: Email.dirty(state.email.value),
+        isValid:
+            Formz.validate([state.userName, state.password, state.email])));
 
     print('Cubit Submit: $state');
   }
@@ -25,16 +28,17 @@ class RegisterCubit extends Cubit<RegisterFormState> {
     emit(
       state.copyWith(
         userName: userName,
-        isValid: Formz.validate([userName, state.password]),
+        isValid: Formz.validate([userName, state.password, state.email]),
       ),
     );
   }
 
   void emailChanged(String value) {
+    final email = Email.dirty(value);
     emit(
       state.copyWith(
-        email: value,
-      ),
+          email: email,
+          isValid: Formz.validate([email, state.userName, state.password])),
     );
   }
 
@@ -44,7 +48,7 @@ class RegisterCubit extends Cubit<RegisterFormState> {
     emit(
       state.copyWith(
         password: password,
-        isValid: Formz.validate([password, state.userName]),
+        isValid: Formz.validate([password, state.userName, state.email]),
       ),
     );
   }
